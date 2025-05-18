@@ -7,7 +7,7 @@ from functools import wraps
 app = Flask(__name__)
 app.secret_key = 'your-secret-key-here'  # Required for sessions and flash messages
 
-# Database helper functions
+
 def get_db():
     if 'db' not in g:
         g.db = sqlite3.connect('books.db')
@@ -19,7 +19,7 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-# Login decorator
+
 def login_required(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -28,7 +28,7 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
-# Google Books API function
+
 def search_book_by_isbn(isbn):
     try:
         url = f"https://www.googleapis.com/books/v1/volumes?q=isbn:{isbn}"
@@ -50,7 +50,7 @@ def search_book_by_isbn(isbn):
         print(f"Error fetching book data: {e}")
         return None
 
-# Routes
+
 @app.route('/')
 @login_required
 def index():
@@ -117,7 +117,7 @@ def delete_book(book_id):
     flash('Book deleted successfully')
     return redirect(url_for('index'))
 
-# Initialize database
+
 def init_db():
     with app.app_context():
         db = get_db()
