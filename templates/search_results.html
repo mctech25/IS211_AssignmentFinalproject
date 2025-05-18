@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results - Book Catalogue{% endblock %}
+
+{% block content %}
+<div class="search-results">
+    <h2>Search Results</h2>
+    
+    {% if books %}
+        <p>Multiple books found. Please select the correct one:</p>
+        <div class="results-grid">
+            {% for book in books %}
+            <div class="result-card">
+                {% if book.thumbnail_url %}
+                <div class="book-image">
+                    <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}">
+                </div>
+                {% endif %}
+
+                <div class="book-info">
+                    <h3>{{ book.title }}</h3>
+                    <p class="author">By {{ book.author }}</p>
+                    <p class="details">Pages: {{ book.page_count }}</p>
+                    {% if book.average_rating %}
+                    <p class="rating">Rating: {{ "%.1f"|format(book.average_rating) }}/5</p>
+                    {% endif %}
+                    <p class="isbn">ISBN: {{ book.isbn }}</p>
+                </div>
+
+                <form action="{{ url_for('add_book') }}" method="POST">
+                    <input type="hidden" name="book_data" value="{{ book|tojson }}">
+                    <button type="submit" class="btn-add">Add This Book</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="no-results">No books found matching your search.</p>
+        <a href="{{ url_for('index') }}" class="btn-back">Back to My Books</a>
+    {% endif %}
+</div>
+{% endblock %}
