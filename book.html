@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+    <h1>My Books</h1>
+    <form method="POST" action="{{ url_for('add_book') }}">
+        <input type="text" name="isbn" placeholder="Enter ISBN">
+        <button type="submit">Add Book</button>
+    </form>
+    
+    <div class="books-grid">
+        {% for book in books %}
+            <div class="book-card">
+                {% if book.thumbnail_url %}
+                    <img src="{{ book.thumbnail_url }}" alt="{{ book.title }}">
+                {% endif %}
+                <h3>{{ book.title }}</h3>
+                <p>By: {{ book.author }}</p>
+                <p>Pages: {{ book.page_count }}</p>
+                <p>Rating: {{ book.average_rating }}</p>
+                <a href="{{ url_for('delete_book', book_id=book.id) }}">Delete</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
